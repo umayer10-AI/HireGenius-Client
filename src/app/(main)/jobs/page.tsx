@@ -69,7 +69,6 @@ function JobsPageInner() {
     }
   };
 
-  // console.log(query.data?.data)
 
   return (
     <Container className="py-10">
