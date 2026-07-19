@@ -219,7 +219,7 @@ export function HomePageClient({ featured, stats, categories }: HomePageClientPr
           />
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {featured.length ? (
-              featured.slice(0, 8).map((job) => <JobCard key={job._id} job={job} />)
+              featured.map((job) => <JobCard key={job._id} job={job} />)
             ) : (
               <Card className="sm:col-span-2 xl:col-span-4">
                 <p className="text-muted">

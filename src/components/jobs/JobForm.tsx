@@ -13,13 +13,13 @@ import { EXPERIENCE_LEVELS, JOB_CATEGORIES, JOB_TYPES, WORK_MODES } from "@/cons
 
 export const jobFormSchema = z.object({
   companyId: z.string().min(1, "Company is required"),
-  title: z.string().min(3, "Title is required"),
-  shortDescription: z.string().min(20, "Short description must be at least 20 characters"),
-  description: z.string().min(50, "Description must be at least 50 characters"),
-  requirements: z.string().min(3, "Add at least one requirement"),
-  responsibilities: z.string().min(3, "Add at least one responsibility"),
+  title: z.string().min(1, "Title is required"),
+  shortDescription: z.string().min(1, "Short description is required"),
+  description: z.string().min(1, "Description is required"),
+  requirements: z.string().min(1, "Add at least one requirement"),
+  responsibilities: z.string().min(1, "Add at least one responsibility"),
   benefits: z.string().optional(),
-  skills: z.string().min(2, "Add at least one skill"),
+  skills: z.string().min(1, "Add at least one skill"),
   salaryMin: z.union([z.string(), z.number()]).transform((v) => Number(v)),
   salaryMax: z.union([z.string(), z.number()]).transform((v) => Number(v)),
   currency: z.string().default("USD"),
@@ -69,8 +69,8 @@ export function toJobPayload(values: JobFormValues) {
     location: values.location,
     vacancies: values.vacancies,
     applicationDeadline: values.applicationDeadline,
-    featured: Boolean(values.featured),
-    status: values.status,
+    featured: false,
+    status: "active",
   };
 }
 
@@ -114,8 +114,8 @@ interface JobFormProps {
 
 export function JobForm({ mode, initialJob, submitting, onSubmit }: JobFormProps) {
   const companies = useQuery({
-    queryKey: ["my-companies"],
-    queryFn: () => api.get<Company[]>("/api/companies/mine"),
+    queryKey: ["companies"],
+    queryFn: () => api.get<Company[]>("/api/companies", { limit: 100, sort: "alphabetical" }),
   });
 
   const {
@@ -133,7 +133,6 @@ export function JobForm({ mode, initialJob, submitting, onSubmit }: JobFormProps
       experience: "Mid Level",
       category: "Software Engineering",
       status: "active",
-      featured: false,
     },
   });
 
@@ -235,11 +234,6 @@ export function JobForm({ mode, initialJob, submitting, onSubmit }: JobFormProps
         <option value="closed">Closed</option>
         <option value="expired">Expired</option>
       </Select>
-
-      <label className="flex items-center gap-2 text-sm md:col-span-2">
-        <input type="checkbox" {...register("featured")} />
-        Feature this job
-      </label>
 
       <Button type="submit" loading={isSubmitting || submitting} className="md:col-span-2 md:w-fit">
         {mode === "create" ? "Publish job" : "Update job"}
