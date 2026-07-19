@@ -20,6 +20,7 @@ interface AuthContextValue {
   logout: () => Promise<void>;
 }
 
+
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function sessionFallbackUser(sessionUser: {
