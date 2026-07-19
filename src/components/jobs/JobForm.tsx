@@ -14,8 +14,8 @@ import { EXPERIENCE_LEVELS, JOB_CATEGORIES, JOB_TYPES, WORK_MODES } from "@/cons
 export const jobFormSchema = z.object({
   companyId: z.string().min(1, "Company is required"),
   title: z.string().min(1, "Title is required"),
-  shortDescription: z.string().min(1, "Short description is required"),
-  description: z.string().min(1, "Description is required"),
+  shortDescription: z.string().min(5, "Short description must be at least 5 characters"),
+  description: z.string().min(5, "Description must be at least 5 characters"),
   requirements: z.string().min(1, "Add at least one requirement"),
   responsibilities: z.string().min(1, "Add at least one responsibility"),
   benefits: z.string().optional(),
@@ -114,8 +114,8 @@ interface JobFormProps {
 
 export function JobForm({ mode, initialJob, submitting, onSubmit }: JobFormProps) {
   const companies = useQuery({
-    queryKey: ["companies"],
-    queryFn: () => api.get<Company[]>("/api/companies", { limit: 100, sort: "alphabetical" }),
+    queryKey: ["my-companies"],
+    queryFn: () => api.get<Company[]>("/api/companies/mine"),
   });
 
   const {
